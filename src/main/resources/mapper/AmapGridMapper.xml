@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amap.mapper.AmapGridMapper">
+  <insert id="insertBatch">
+    INSERT INTO amap_grid (batch_no, region, poi_type, grid_no, row_index, col_index,
+      min_lng, min_lat, max_lng, max_lat, center_lng, center_lat, grid_size_meter,
+      relation_type, random_order, status, create_time, update_time)
+    VALUES
+    <foreach collection="grids" item="g" separator=",">
+      (#{g.batchNo}, #{g.region}, #{g.poiType}, #{g.gridNo}, #{g.rowIndex}, #{g.colIndex},
+       #{g.minLng}, #{g.minLat}, #{g.maxLng}, #{g.maxLat}, #{g.centerLng}, #{g.centerLat},
+       #{g.gridSizeMeter}, #{g.relationType}, #{g.randomOrder}, #{g.status},
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </foreach>
+  </insert>
+  <select id="selectWaiting" resultType="com.example.amap.entity.AmapGrid">
+    SELECT * FROM amap_grid WHERE batch_no = #{batchNo} AND status = 'WAITING'
+    ORDER BY random_order LIMIT #{limit}
+  </select>
+  <select id="lockWaiting" resultType="com.example.amap.entity.AmapGrid">
+    SELECT * FROM amap_grid WHERE batch_no = #{batchNo} AND status = 'WAITING'
+    ORDER BY random_order LIMIT #{limit} FOR UPDATE SKIP LOCKED
+  </select>
+</mapper>

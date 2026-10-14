@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-parent</artifactId><version>3.5.6</version><relativePath/></parent>
+  <groupId>com.example</groupId><artifactId>amap-grid</artifactId><version>1.0.0</version>
+  <name>amap-grid</name><description>Amap POI adaptive grid probing</description>
+  <properties><java.version>17</java.version><fastjson2.version>2.0.57</fastjson2.version><mybatis-plus.version>3.5.12</mybatis-plus.version></properties>
+  <dependencies>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId><exclusions><exclusion><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-json</artifactId></exclusion></exclusions></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
+    <dependency><groupId>com.baomidou</groupId><artifactId>mybatis-plus-spring-boot3-starter</artifactId><version>${mybatis-plus.version}</version></dependency>
+    <dependency><groupId>org.postgresql</groupId><artifactId>postgresql</artifactId><scope>runtime</scope></dependency>
+    <dependency><groupId>com.alibaba.fastjson2</groupId><artifactId>fastjson2</artifactId><version>${fastjson2.version}</version></dependency>
+    <dependency><groupId>com.alibaba.fastjson2</groupId><artifactId>fastjson2-extension-spring6</artifactId><version>${fastjson2.version}</version></dependency>
+    <dependency><groupId>com.squareup.okhttp3</groupId><artifactId>okhttp</artifactId><version>4.12.0</version></dependency>
+    <dependency><groupId>org.locationtech.jts</groupId><artifactId>jts-core</artifactId><version>1.20.0</version></dependency>
+    <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><optional>true</optional></dependency>
+    <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-test</artifactId><scope>test</scope></dependency>
+    <dependency><groupId>com.squareup.okhttp3</groupId><artifactId>mockwebserver</artifactId><version>4.12.0</version><scope>test</scope></dependency>
+  </dependencies>
+  <build><plugins>
+    <plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId><configuration><excludes><exclude><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId></exclude></excludes></configuration></plugin>
+    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-enforcer-plugin</artifactId><version>3.5.0</version><executions><execution><id>ban-forbidden-stack</id><goals><goal>enforce</goal></goals><configuration><rules><bannedDependencies><excludes>
+      <exclude>com.fasterxml.jackson.*:*</exclude><exclude>com.google.code.gson:gson</exclude><exclude>com.alibaba:fastjson</exclude><exclude>org.hibernate.orm:*</exclude><exclude>org.springframework.boot:spring-boot-starter-data-jpa</exclude><exclude>org.mybatis.spring.boot:mybatis-spring-boot-starter</exclude>
+    </excludes></bannedDependencies></rules></configuration></execution></executions></plugin>
+  </plugins></build>
+</project>

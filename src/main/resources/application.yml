@@ -1,0 +1,43 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://127.0.0.1:5432/amap_poi}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: never
+mybatis-plus:
+  mapper-locations:
+    - classpath:/mapper/*.xml
+  type-aliases-package: com.example.amap.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+amap:
+  key: ${AMAP_KEY}
+  base-url: https://restapi.amap.com
+  connect-timeout-seconds: 10
+  read-timeout-seconds: 30
+  poi-grid:
+    region: "310000"
+    types: "050000"
+    city-limit: true
+    # false 时不发送 show_fields；true 时也仅请求基础字段，不请求扩展字段
+    show-fields: false
+    initial-grid-size-meter: 5000
+    safe-count: 100
+    min-grid-size-meter: 250
+    top-density-grid-count: 5
+    page-size: 25
+    request-interval-ms: 1100
+    # 首次请求失败后的最多重试次数，总共最多 4 次请求
+    retry-count: 3
+    retry-backoff-ms: [1000, 3000, 10000]
+    database-batch-size: 500

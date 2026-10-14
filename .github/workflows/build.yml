@@ -1,0 +1,48 @@
+name: Maven build and PostgreSQL verification
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: amap_poi_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test-password
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d amap_poi_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      DB_IT: 'true'
+      DB_URL: jdbc:postgresql://127.0.0.1:5432/amap_poi_test
+      DB_USERNAME: postgres
+      DB_PASSWORD: test-password
+      AMAP_KEY: test-key-no-network
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Build executable jar and run unit and PostgreSQL tests
+        run: mvn -B clean package
+      - name: Upload jar and test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: amap-grid-build
+          path: |
+            target/amap-grid-1.0.0.jar
+            target/surefire-reports/

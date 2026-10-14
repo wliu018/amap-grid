@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.amap.mapper.AmapGridConfigMapper">
+  <insert id="upsert">
+    INSERT INTO amap_grid_config (region, poi_type, recommended_grid_size, safe_count,
+        max_probe_count, current_batch_no, create_time, update_time)
+    VALUES (#{region}, #{poiType}, #{recommendedGridSize}, #{safeCount},
+        #{maxProbeCount}, #{currentBatchNo}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    ON CONFLICT (region, poi_type) DO UPDATE SET
+        recommended_grid_size = EXCLUDED.recommended_grid_size,
+        safe_count = EXCLUDED.safe_count,
+        max_probe_count = EXCLUDED.max_probe_count,
+        current_batch_no = EXCLUDED.current_batch_no,
+        update_time = CURRENT_TIMESTAMP
+  </insert>
+</mapper>

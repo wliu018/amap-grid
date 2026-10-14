@@ -69,6 +69,12 @@ class GeometryAndGridTest {
         Envelope box = new Envelope(121, 121.021, 31, 31.018);
         var grids = GridUtils.cover(box, 625);
         assertEquals(GeoUtils.meterToLatDegree(625), grids.get(0).maxLat() - grids.get(0).minLat(), 1e-13);
+        for (GridCell g : grids) {
+            grids.stream().filter(n -> n.rowIndex() == g.rowIndex() + 1 && n.colIndex() == 1).findFirst()
+                .ifPresent(n -> assertEquals(g.maxLat(), n.minLat(), 0));
+            grids.stream().filter(n -> n.rowIndex() == g.rowIndex() && n.colIndex() == g.colIndex() + 1).findFirst()
+                .ifPresent(n -> assertEquals(g.maxLng(), n.minLng(), 0));
+        }
         Geometry union = UnaryUnionOp.union(grids.stream().map(g -> (Geometry)GeometryUtils.polygon(g)).toList());
         assertTrue(union.covers(GeometryUtils.polygon(new GridCell(121, 31, 121.021, 31.018, 1, 1))));
     }

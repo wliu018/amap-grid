@@ -20,13 +20,14 @@ public final class GridUtils {
         List<GridCell> result = new ArrayList<>();
         for (int row = 0; row < rows; row++) {
             double minLat = e.getMinY() + row * latStep;
-            double maxLat = minLat + latStep;
+            double maxLat = e.getMinY() + (row + 1) * latStep;
             // 同一行使用相同经度步长，行与行可能有不同列数，但均完整覆盖 BoundingBox。
             double lngStep = GeoUtils.meterToLngDegree(meter, (minLat + maxLat) / 2);
             int cols = checkedCount(e.getWidth() / lngStep);
             for (int col = 0; col < cols; col++) {
                 double minLng = e.getMinX() + col * lngStep;
-                result.add(new GridCell(minLng, minLat, minLng + lngStep, maxLat, row + 1, col + 1));
+                double maxLng = e.getMinX() + (col + 1) * lngStep;
+                result.add(new GridCell(minLng, minLat, maxLng, maxLat, row + 1, col + 1));
             }
         }
         return result;
